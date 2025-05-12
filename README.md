@@ -1,3 +1,8 @@
+# Notes App
+## 1. Description
+Awesome Notes app inspired by Noteped application.
+## 2. Setup
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -206,3 +211,4 @@ Componentes más complejos relacionados a formularios:
 TextField, Select, DatePicker, FormGroup, etc.
 
 Encapsulan validación, estados, integración con react-hook-form, etc.
+
