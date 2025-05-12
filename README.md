@@ -169,6 +169,70 @@ src/
     ├── blog/                # (Opcional) sistema de artículos/blogs
     └── contact/             # Página de contacto, formulario, mapa, etc.
 
+# Final structure project
+src/
+├── app/                             # Entry point de la app (App.tsx, providers, router)
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── router/
+│   └── providers/                  # Contextos globales: Theme, Auth, etc.
+│
+├── domains/                         # Dominios o features principales (DDD)
+│   ├── products/
+│   │   ├── application/             # Casos de uso (business logic)
+│   │   │   └── fetchProducts.ts
+│   │   ├── domain/                  # Entidades, modelos, interfaces puras
+│   │   │   └── Product.ts
+│   │   ├── infrastructure/          # API calls, servicios externos
+│   │   │   └── productApi.ts
+│   │   ├── presentation/            # Páginas, componentes UI de producto
+│   │   │   ├── pages/
+│   │   │   │   └── ProductListPage.tsx
+│   │   │   ├── components/
+│   │   │   │   └── ProductCard.tsx
+│   │   │   └── routes.tsx
+│   │   └── index.ts                 # Barrel export del dominio
+│
+│   ├── auth/                        # Otro dominio (igual estructura)
+│   ├── cart/
+│   ├── users/
+│   └── ...
+│
+├── shared/                          # Reutilizable por todos los dominios
+│   ├── components/                  # Botones, inputs, modales, etc.
+│   ├── hooks/
+│   ├── types/
+│   ├── utils/
+│   ├── constants/
+│   └── config/                      # Config global (env vars, etc.)
+│
+├── core/                            # Infraestructura de bajo nivel
+│   ├── theme/                       # Sistema de theming
+│   ├── context/                     # Contextos globales
+│   ├── services/                    # Logger, Notifier, Analytics
+│   ├── i18n/                        # Internacionalización
+│   └── store/                       # Zustand, Redux o similar
+│
+├── layouts/                         # Layouts base: AdminLayout, PublicLayout
+│   ├── AdminLayout.tsx
+│   ├── PublicLayout.tsx
+│   └── ...
+│
+├── assets/
+│   ├── images/
+│   ├── icons/
+│   ├── fonts/
+│   └── styles/
+│       ├── tailwind.css
+│       └── variables.css
+│
+├── theme/                           # Temas CSS o configuración de Tailwind
+│   ├── dark.css
+│   ├── light.css
+│   └── theme.config.ts
+│
+├── index.html
+└── vite.config.ts
 
 ```
 
