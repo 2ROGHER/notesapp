@@ -234,6 +234,18 @@ src/
 ├── index.html
 └── vite.config.ts
 
+# Structure inside the src/domain/{domain}/presentation/
+presentation/
+├── pages/                # Vistas completas asociadas a rutas (route-level)
+├── components/           # Componentes visuales propios del dominio
+├── containers/           # Smart components (con lógica + presentación)
+├── modals/               # Modales del dominio (crear, editar, eliminar)
+├── widgets/              # Pequeños bloques UI reutilizables dentro del dominio
+├── hooks/                # Hooks específicos de presentación del dominio
+├── styles/               # Estilos locales (CSS Modules, Tailwind config, etc.)
+└── routes.tsx            # Rutas locales del dominio
+
+
 ```
 
 EXPLICACIÓN DETALLADA DE LAS SUBCARPETAS
