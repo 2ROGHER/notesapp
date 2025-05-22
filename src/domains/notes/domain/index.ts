@@ -1,2 +1,2 @@
-export * from "./Color";
-export * from "./Note";
+export * from './Note';
+export { NoteStatus } from './note-status.enum';

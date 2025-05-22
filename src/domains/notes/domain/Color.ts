@@ -1,66 +1,71 @@
 export class Color {
-    private _id: string;
-    private _name: string;
-    private _description: string;
-    private _value: string;
-    private _createdAt: Date;
-    private _updatedAt: Date;
-    
-    constructor (id: string, name: string, description: string, value: string, createdAt: Date, updatedAt: Date) {
-        this._id = id;
-        this._name = name;
-        this._description = description;
-        this._value = value;
-        this._createdAt = createdAt;
-        this._updatedAt = updatedAt;
-    }
-    get id(): string {
-        return this._id;
-    }
+  private _id: string;
+  private _name: string;
+  private _description: string;
+  private _value: string;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
-    set id(value: string) {
-        this._id = value;
-    }
+  constructor(
+    id: string,
+    name: string,
+    description: string,
+    value: string,
+    createdAt: Date,
+    updatedAt: Date
+  ) {
+    this._id = id;
+    this._name = name;
+    this._description = description;
+    this._value = value;
+    this._createdAt = createdAt;
+    this._updatedAt = updatedAt;
+  }
+  get id(): string {
+    return this._id;
+  }
 
-    get name(): string {
-        return this._name;
-    }
+  set id(value: string) {
+    this._id = value;
+  }
 
-    set name(value: string) {
-        this._name = value;
-    }
+  get name(): string {
+    return this._name;
+  }
 
-    get description(): string {
-        return this._description;
-    }
+  set name(value: string) {
+    this._name = value;
+  }
 
-    set description(value: string) {
-        this._description = value;
-    }
+  get description(): string {
+    return this._description;
+  }
 
-    get value(): string {
-        return this._value;
-    }
+  set description(value: string) {
+    this._description = value;
+  }
 
-    set value(value: string) {
-        this._value = value;
-    }
+  get value(): string {
+    return this._value;
+  }
 
-    get createdAt(): Date {
-        return this._createdAt;
-    }
+  set value(value: string) {
+    this._value = value;
+  }
 
-    set createdAt(value: Date) {
-        this._createdAt = value;
-    }
+  get createdAt(): Date {
+    return this._createdAt;
+  }
 
-    get updatedAt(): Date {
-        return this._updatedAt;
-    }
+  set createdAt(value: Date) {
+    this._createdAt = value;
+  }
 
-    set updatedAt(value: Date) {
-        this._updatedAt = value;
-    }
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
 
-
+  set updatedAt(value: Date) {
+    this._updatedAt = value;
+  }
 }

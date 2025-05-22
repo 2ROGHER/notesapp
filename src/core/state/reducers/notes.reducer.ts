@@ -10,10 +10,13 @@ const initialState: NotesState<Note> = {
 export const notesReducer = (
   state = initialState,
   action: Action<Note | any>
-) => {
+): NotesState<Note> => {
   switch (action.type) {
     case ADD_NOTE:
-      return null;
+      return {
+        ...state,
+        notes: [],
+      };
     default:
       return state;
   }

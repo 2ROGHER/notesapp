@@ -1,86 +1,118 @@
 import type { Color } from "./Color";
+import type { NoteStatus } from "./note-status.enum";
 
 export class Note {
-  private _id: string;
-  private _name: string;
-  private _content: string;
-  private _color: Color[];
-  private _attributes: Map<string, any>;
-  private _createdAt: Date;
-  private _updatedAt: Date;
+  private _id: string = "";
+  private _name: string = "";
+  private _content: string = "";
+  private _backgroundImages: Array<string> = [];
+  private _color: Set<Color> = new Set<Color>(); // List of colors without duplicates
+  private _status: NoteStatus;
+  private _createdAt: Date = new Date();
+  private _updatedAt: Date = new Date();
+  private _attributes: Map<string, any> = new Map<string, any>();
 
   constructor(
     id: string,
     name: string,
     content: string,
-    color: Color[],
-    attributes: Map<string, any>,
+    backgroundImage: Array<string>,
+    color: Set<Color>,
+    status: NoteStatus,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    attributes: Map<string, any>
   ) {
     this._id = id;
     this._name = name;
     this._content = content;
+    this._backgroundImages = backgroundImage;
     this._color = color;
-    this._attributes = attributes;
+    this._status = status;
     this._createdAt = createdAt;
     this._updatedAt = updatedAt;
+    this._attributes = attributes;
   }
 
-  
-  get id(): string {
+  public get id(): string {
     return this._id;
   }
 
-  set id(value: string) {
+  public set id(value: string) {
     this._id = value;
   }
 
-  get name(): string {
+  public get name(): string {
     return this._name;
   }
 
-  set name(value: string) {
+  public set name(value: string) {
     this._name = value;
   }
 
-  get content(): string {
+  public get content(): string {
     return this._content;
   }
 
-  set content(value: string) {
+  public set content(value: string) {
     this._content = value;
   }
 
-  get color(): Color[] {
+  public get backgroundImage(): Array<string> {
+    return this._backgroundImages;
+  }
+
+  public set backgroundImage(value: string) {
+    this.backgroundImage.push(value);
+  }
+
+  public get color(): Set<Color> {
     return this._color;
   }
 
-  set color(value: Color[]) {
-    this._color = value;
+  public set color(value: Color) {
+    this._color.add(value);
   }
 
-  get attributes(): Map<string, any> {
-    return this._attributes;
+  public get status(): NoteStatus {
+    return this._status;
   }
 
-  set attributes(value: Map<string, any>) {
-    this._attributes = value;
+  public set status(value: NoteStatus) {
+    this._status = value;
   }
 
-  get createdAt(): Date {
+  public get createdAt(): Date {
     return this._createdAt;
   }
 
-  set createdAt(value: Date) {
+  public set createdAt(value: Date) {
     this._createdAt = value;
   }
 
-  get updatedAt(): Date {
+  public get updatedAt(): Date {
     return this._updatedAt;
   }
 
-  set updatedAt(value: Date) {
+  public set updatedAt(value: Date) {
     this._updatedAt = value;
   }
+
+  public get attributes(): Map<string, any> {
+    return this._attributes;
+  }
+
+  public set attributes(value: any) {
+    this._attributes.set(value.key, value.value);
+  }
+
+  public setAttributes(key: string, value: any): void {
+    this._attributes.set(key, value);
+  }
+
+  // ====================================
+  //               METHODS
+  // ====================================
+
+
 }
