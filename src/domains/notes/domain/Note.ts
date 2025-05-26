@@ -8,6 +8,7 @@ export class Note {
   private _backgroundImages: Array<string> = [];
   private _color: Set<Color> = new Set<Color>(); // List of colors without duplicates
   private _status: NoteStatus;
+  private _timer: Date;
   private _createdAt: Date = new Date();
   private _updatedAt: Date = new Date();
   private _attributes: Map<string, any> = new Map<string, any>();
@@ -19,6 +20,7 @@ export class Note {
     backgroundImage: Array<string>,
     color: Set<Color>,
     status: NoteStatus,
+    timer: Date,
     createdAt: Date,
     updatedAt: Date,
     attributes: Map<string, any>
@@ -29,6 +31,7 @@ export class Note {
     this._backgroundImages = backgroundImage;
     this._color = color;
     this._status = status;
+    this._timer = timer;
     this._createdAt = createdAt;
     this._updatedAt = updatedAt;
     this._attributes = attributes;
@@ -82,6 +85,14 @@ export class Note {
     this._status = value;
   }
 
+  public get timer(): Date {
+    return this._timer;
+  }
+
+  public set timer(value: Date) {
+    this._timer = value;
+  }
+  
   public get createdAt(): Date {
     return this._createdAt;
   }
@@ -113,6 +124,4 @@ export class Note {
   // ====================================
   //               METHODS
   // ====================================
-
-
 }

@@ -19,3 +19,6 @@ export * from "./presentation/components/TextInputField/TextInputFieldComponent"
 // export all from [layouts]
 export * from "./layouts/FooterBar/FooterBarComponent";
 export * from "./layouts/ToolsBar/ToolsBarComponent";
+
+// export all from [services]
+export * from './services';
