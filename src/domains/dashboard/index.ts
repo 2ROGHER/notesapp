@@ -1,4 +1,5 @@
 // Export all from [domain]
+export * from "./domain/types/";
 
 // export all from [hooks]
 

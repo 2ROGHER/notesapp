@@ -1,0 +1,77 @@
+@use "../../../../../scss/index.scss" as *;
+
+.tab {
+    position: relative;
+    background-color: none;
+    @include flex-align(center, start, 1rem);
+    padding: 0.625rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+
+    &-active {
+        width: 0.5rem;
+        height: 0.5rem;
+        background: blue;
+        border-radius: 50%;
+    }
+
+    &-label {
+    }
+
+    &-closed {
+        @include flex-align(center, center);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0.5rem;
+        padding: 0.25rem;
+        border-radius: $border-radius;
+        margin-left: auto !important;
+
+        &:hover {
+            background: $base-hover-bg-color;
+            cursor: pointer;
+        }
+    }
+
+    &-changed {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0.95rem;
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: 50%;
+        background-color: #b9b9b9;
+        margin-left: auto !important;
+    }
+
+ 
+
+    &::after {
+        content: "";
+        height: calc(20 / 16) + rem;
+        width: 1px;
+        background: $base-border-color;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        color: $base-text-color;
+    }
+    &--hovered::after {
+        opacity: 0;
+        pointer-events: none;
+    }
+    &--active {
+        background: $base-active-bg-tab-color;
+    }
+
+    &:hover {
+        background-color: $base-hover-tab-bg-color;
+    }
+}
+
+// ==========================
+// =          OTHERS          =
+// ==========================
+

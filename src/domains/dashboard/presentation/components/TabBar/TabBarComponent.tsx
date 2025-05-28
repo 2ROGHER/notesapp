@@ -1,4 +1,6 @@
 import React, { type JSX } from "react";
+import './TabBarComponent.scss';
+
 import { TabComponent} from '../../../';
 import { Tab } from "../../../domain";
 
@@ -20,12 +22,13 @@ export const TabBarComponent: React.FC<TabBarProps> = ({
     <ul className="tab-bar">
       {tabs.length > 0
         ? tabs.map((t: Tab) => (
-            <li className="tab-bar-item" key={t.id}>
+            <li className="tab-bar-item" key={t.id} style={{ width: '18.75rem'}}>
               <TabComponent
                 {...t}
                 /* Add any other required props here */
                 onTabClick={() => {
                   /* TODO: handle tab click */
+                  
                 }}
                 onCloseTab={() => {
                   /* TODO: handle close tab */

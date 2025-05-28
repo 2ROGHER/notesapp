@@ -1,0 +1,26 @@
+@use "../../../../scss/index.scss" as *;
+
+.tools-bar {
+    position: relative;
+    @include flex-align(center, space-between, 0.1rem);
+    background: $base-active-bg-tab-color;
+    padding: 0.25rem 0.75rem;
+
+    &-right,
+    &-left {
+        @include flex-align(center, _, 0.75rem);
+        font-size: 0.875rem;
+
+        div {
+            @include flex-align(center, center);
+            padding: 0.5rem;
+            border-radius: $border-radius;
+            background-color: transparent;
+            transition: background-color 0.3s ease-in-out;
+        }
+        div:hover {
+            background-color: $base-hover-bg-color;
+            cursor: pointer;
+        }
+    }
+}

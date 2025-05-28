@@ -1,0 +1,21 @@
+@use "../../../../scss/index.scss" as *;
+
+.footer-bar {
+    @include flex-align(center, space-between, 0.1rem);
+    height: 100%;
+    width: 100%;
+    padding: 0 0.75rem;
+    color: $base-footer-inactive-text-color;
+
+    &-right,
+    &-left {
+        @include flex-align(center, center, 0.75rem, _);
+        font-size: 0.875rem;
+    }
+
+    .separator {
+        width: 1px;
+        height: calc(20 / 16) + rem;
+        background: $base-border-color;
+    }
+}

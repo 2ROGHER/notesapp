@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Saira+Extra+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+
+// ==============================
+// =          Fonts           =
+// ==============================
+$font-fira-code: "Fira Code", monospace;
+$font-inter: "Inter", sans-serif;
+$font-manrope: "Manrope", sans-serif;
+$font-montserrat: "Montserrat", sans-serif;
+$font-poppins: "Poppins", sans-serif;
+$font-quicksand: "Quicksand", sans-serif;
+$font-saira-extra-condensed: "Saira Extra Condensed", sans-serif;
+$font-inter: "Inter", sans-serif; // Base font family for the application
+
+// ==============================
+// =          Colors           =
+// ==============================   
+
+
+$color-primary: #007bff; // Primary color
+$color-secondary: #6c757d; // Secondary color
+
+$color-white: #fff; // White color
+$color-black: #000; // Black color
+$base-app-bg-color: #202020; // Base application background color
+$base-text-color: #f8f9fa; // Base text color
+$base-border-color: #3d3d3d; // Base border color
+$base-active-text-color: #fff; // Base active text color
+$base-active-bg-color: #343a40; // Base active background color
+$base-active-bg-tab-color: #2C2C2C; // Base active background color for tabs
+$base-footer-bg-color: #2C2C2C; // Base footer background color
+$base-footer-inactive-text-color: #dadada; // Base footer inactive text color
+$base-footer-active-text-color: #fffafa; // Base footer active text color
+$base-hover-tab-bg-color: #2d2d2d;
+$base-hover-bg-color: #3a3a3a; // Base hover background color
+$base-text-area-bg-color: #272727; // Base input field background color
+
+    
+// ==============================
+// =          Sizes            =
+// ==============================
+$size-xs: 0.75rem; // Extra small size
+
+$size-sm: 0.875rem; // Small size
+$size-md: 1rem; // Medium size
+$size-lg: 1.25rem; // Large size
+$size-xl: 1.5rem; // Extra large size
+$size-xxl: 2rem; // Double extra large size
+$size-xxxl: 3rem; // Triple extra large size
+$size-xxxxl: 4rem; // Quadruple extra large size
+$size-xxxxxl: 5rem; // Quintuple extra large size
+
+$base-h1-size: 3.814rem; // Base size for h1 headings
+$base-h2-size: 3.052rem; // Base size for h2 headings
+$base-h3-size: 2.441rem; // Base size for h3 headings
+$base-h4-size: 1.953rem; // Base size for h4 headings
+$base-h5-size: 1.563rem; // Base size for h5 headings
+$base-h6-size: 1.25rem; // Base size for h6 headings
+$base-font-size: 1rem; // Base font size for the application
+$base-small-font-size: 0.875rem; // Base small font size for the application
+$base-line-height: 1.5; // Base line height for text
+$base-letter-spacing: 0.05em; // Base letter spacing for text
+
+// ==============================
+// =          Dashboard Sizes            =
+// ==============================
+$base-header-height: 4rem; // Base height for the header
+$base-tools-height: 3rem; // Base height for the tools bar
+$base-footer-height: 3rem; // Base height for the footer
+$base-main-height: calc(100vh - $base-header-height - $base-tools-height - $base-footer-height); // Base height for the main content area
+
+// ==============================
+// =          Spacing          =
+// ==============================
+
+$spacing-xs: 0.25rem; // Extra small spacing
+$spacing-sm: 0.5rem; // Small spacing
+$spacing-md: 1rem; // Medium spacing
+$spacing-lg: 1.5rem; // Large spacing
+$spacing-xl: 2rem; // Extra large spacing
+
+// ==============================
+// =          Borders          =
+// ==============================
+
+
+$border-radius: 0.25rem; // Border radius for rounded corners
+$border-width: 1px; // Default border width 
+$border-color: #dee2e6; // Default border color
+$border-style: solid; // Default border style
+
+// ==============================
+// =          Shadows          =
+// ==============================
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05); // Small shadow
+
+
+// ==============================
+// =          Transitions      =
+// ==============================
+
+

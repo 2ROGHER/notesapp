@@ -2,7 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
-import { notesReducer } from '../reducers';
+import { dashboardReducer, notesReducer } from '../reducers';
 // import 'dotenv/config';
 
 const store = configureStore({
@@ -10,6 +10,7 @@ const store = configureStore({
     // auth: authReducer,
     // user: userReducer,
     notes: notesReducer,
+    dashboard: dashboardReducer,
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({

@@ -1,0 +1,12 @@
+@use "../../../../../scss/index.scss" as *;
+
+.text-area {
+    background: $base-text-area-bg-color;
+    height: 100%;
+    padding: 0.75rem !important;
+
+    &-box {
+        outline: none;
+        border: none;
+    }
+}

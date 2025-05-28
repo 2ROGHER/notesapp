@@ -1,0 +1,8 @@
+@use "../../../../../scss/index.scss" as *;
+.edition-tools {
+    display: none;
+    position: absolute;
+    top: 0; // basics here
+    background: red;
+    @include flex-align(center, center, 0);
+}
