@@ -7,7 +7,7 @@ import {
   toggleTabHover,
 } from "../../../../../core/state/actions";
 import type { Dispatch } from "redux";
-import type { Tab } from "../../../domain";
+import { TabState, type Tab } from "../../../domain";
 
 export type TabComponentProps = {
   tab: Tab;
@@ -22,7 +22,8 @@ export const TabComponent: React.FC<TabComponentProps> = ({
   tab,
   index,
 }): JSX.Element => {
-  const dispatch = useDispatch<Dispatch<any>>();
+  const dispatch = useDispatch<Dispatch<Tab | any>>();
+  
   const tabRef = useRef<HTMLDivElement>(null);
 
   const handleTabOver = (id: string) => dispatch(toggleTabHover(id, true));
@@ -34,8 +35,9 @@ export const TabComponent: React.FC<TabComponentProps> = ({
   };
 
   const handleCloseTab = (e: React.MouseEvent, id: string) => {
+    console.log("Closing tab", e);
     e.stopPropagation(); // stop event propagation
-    dispatch(closeTab(id));
+    dispatch(closeTab(id, TabState.CLOSED));
   };
 
   const classes = [

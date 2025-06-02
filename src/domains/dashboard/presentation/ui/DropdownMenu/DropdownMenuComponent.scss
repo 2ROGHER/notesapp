@@ -1,0 +1,47 @@
+@use "../../../../../scss/index.scss" as *;
+
+.dropdown-menu {
+    position: relative;
+    // padding: 0.25rem 0.5rem !important; // base padding
+
+    &-header {
+        position: relative;
+        @include flex-align(center, space-between);
+        padding: 0.25rem 0.5rem !important;
+        // border: 1px solid #ccc;
+        // background: #2c2c2c !important;
+
+        .separator {
+            width: 1px;
+            height: 1.25rem;
+            background: $base-border-color;
+        }
+
+        button {
+            @include flex-align(center, center);
+        }
+    }
+
+    &-body {
+        width: 100%;
+        position: absolute;
+        bottom: -4.25rem;
+        background: #2c2c2c; // modify letter
+        ul {
+            position: relative;
+            @include flex-align(flex-start, center, 0, column);
+            // padding: 0.25rem 0.5rem !important;
+
+            li {
+                width: 100%;
+                padding: 0.25rem;
+                cursor: pointer;
+            }
+            li:hover {
+                background-color: $base-border-color;
+            }
+        }
+
+
+    }
+}

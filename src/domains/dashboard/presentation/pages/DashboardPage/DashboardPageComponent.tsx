@@ -1,7 +1,7 @@
 import "./DashboardPageComponent.scss";
+import { EditionToolsWidget } from "../../widgets/EditionToolsWidget/EditionToolsWidget";
 
 import React, { type JSX } from "react";
-import { v4 } from "uuid";
 
 import {
   LogoComponent,
@@ -12,6 +12,7 @@ import {
 } from "../../../";
 
 import { useSelector } from "react-redux";
+import { DropDownMenuComponent } from "../../ui/DropdownMenu/DropdownMenuComponent";
 
 // TODO("implement here contexts to works freely")
 
@@ -49,6 +50,13 @@ export const DashboardPageComponent: React.FC<
       <main className="dashboard-main">
         {/* Here goes the EditorTools widget to edit your notes as you want */}
         {/* <EditionToolsWidget /> */}
+
+        <DropDownMenuComponent
+          label="fonts"
+          items={["font1", "font2", "font3", "font4", "font5"]}
+          props={{ width: "100px", height: "100px", background: "#2c2c2c" }}
+          defaultComponentProps={<span>items not found</span>}
+        />
         <TextInputFieldComponent />
       </main>
 

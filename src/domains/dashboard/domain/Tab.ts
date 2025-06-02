@@ -1,4 +1,4 @@
-import type { TabStatus } from "./tab-status.enum";
+import type { TabState } from "./tab-status.enum";
 
 /**
  * Class to represent a tab in the dashboard page.
@@ -26,7 +26,7 @@ export class Tab {
   private _changed: boolean;
   private _hovered: boolean;
   private _active: boolean;
-  private _state: TabStatus;
+  private _state: TabState;
 
   constructor(
     id: string,
@@ -34,7 +34,7 @@ export class Tab {
     changed: boolean,
     hovered: boolean,
     active: boolean,
-    state: TabStatus
+    state: TabState
   ) {
     this._id = id;
     this._label = label;
@@ -79,10 +79,10 @@ export class Tab {
     this._active = value;
   }
 
-  get state(): TabStatus {
+  get state(): TabState {
     return this._state;
   }
-  set state(value: TabStatus) {
+  set state(value: TabState) {
     this._state = value;
   }
 

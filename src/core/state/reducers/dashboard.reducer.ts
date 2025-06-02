@@ -1,5 +1,5 @@
 import type { DashboardState } from "../../../domains/dashboard";
-import { Tab } from "../../../domains/dashboard/domain";
+import { Tab, TabState } from "../../../domains/dashboard/domain";
 import type { Action } from "../../../shared/types";
 import { v4 } from "uuid";
 import {
@@ -12,11 +12,11 @@ const initialState: DashboardState | any = {
   header: {
     title: "Dashboard",
     tabs: [
-      new Tab(v4(), "text.md", true, false, false, true), // [state] represent with [tre] if this tab is open
-      new Tab(v4(), "another.md", true, false, false, true),
-      new Tab(v4(), "text.js", true, false, false, true),
-      new Tab(v4(), "bundle.js", true, false, false, true),
-      new Tab(v4(), "index.html", true, false, false, true),
+      new Tab(v4(), "text.md", true, false, false, TabState.ACTIVE), // [state] represent with [tre] if this tab is open
+      new Tab(v4(), "another.md", true, false, false, TabState.ACTIVE),
+      new Tab(v4(), "text.js", true, false, false, TabState.ACTIVE),
+      new Tab(v4(), "bundle.js", true, false, false, TabState.ACTIVE),
+      new Tab(v4(), "index.html", true, false, false, TabState.ACTIVE),
     ],
   },
   tools: {
@@ -96,22 +96,25 @@ export const dashboardReducer = (
       };
 
     case CLOSE_TAB:
+      console.log("closing tab here", action.payload);
       return {
         ...state,
         header: {
           ...state.header,
-          tabs: state.header.tabs.map((tab: Tab) =>
-            tab.id == action.payload.id
-              ? new Tab(
-                  tab.id,
-                  tab.label,
-                  tab.changed,
-                  tab.hovered,
-                  tab.active, // [!tab.active] represent with [false] if this tab is active toggle is important
-                  action.payload.v
-                )
-              : tab
-          ),
+          tabs: state.header.tabs
+            .map((tab: Tab) =>
+              tab.id == action.payload.id
+                ? new Tab(
+                    tab.id,
+                    tab.label,
+                    tab.changed,
+                    tab.hovered,
+                    tab.active, // [!tab.active] represent with [false] if this tab is active toggle is important
+                    action.payload.s
+                  )
+                : tab
+            )
+            .filter((tab: Tab) => tab.state !== TabState.CLOSED),
         },
       };
     default:

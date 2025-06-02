@@ -1,4 +1,4 @@
-import type { UUID } from "crypto";
+import type { TabState } from "../../../domains/dashboard/domain";
 import type { IAction } from "../../../shared/interfaces";
 import {
   CLOSE_TAB,
@@ -6,11 +6,6 @@ import {
   TOGGLE_TAB_ACTIVE,
   TOGGLE_TAB_HOVERED,
 } from "../actions-types/";
-
-export const closeTab = (id: string): IAction<any> => ({
-  type: CLOSE_TAB,
-  payload: { id },
-});
 
 /**
  * This function is used to close a tab, it simply returns an action object
@@ -23,7 +18,7 @@ export const closeTab = (id: string): IAction<any> => ({
 
 export const toggleTabActive = (id: string): IAction<any> => ({
   type: TOGGLE_TAB_ACTIVE,
-  payload: { id }, 
+  payload: { id },
 });
 
 export const toggleTabHover = (id: string, v: boolean): IAction<any> => ({
@@ -34,4 +29,9 @@ export const toggleTabHover = (id: string, v: boolean): IAction<any> => ({
 export const setTabUpdated = (v: string): IAction<string> => ({
   type: SET_TAB_UPDATED,
   payload: v,
+});
+
+export const closeTab = (id: string, s: TabState): IAction<any> => ({
+  type: CLOSE_TAB,
+  payload: { id, s },
 });

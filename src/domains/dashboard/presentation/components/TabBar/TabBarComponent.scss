@@ -5,16 +5,20 @@
     gap: 0.15rem !important;
     width: 100%;
     margin-left: 3rem !important;
+    @include flex-align(center, start);
 }
 
 .add-tab-button {
     @include flex-align(center, center);
-    margin-left: 1rem;
-    padding: 0.25rem;
     cursor: pointer;
     border-radius: $border-radius;
-    
+    padding: 0.25rem;
+    margin-left: 0.5rem;
+
     &:hover {
         background-color: $base-hover-bg-color;
+        svg {
+            color: #ffffff;
+        }
     }
 }

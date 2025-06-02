@@ -1,8 +1,32 @@
 @use "../../../../../scss/index.scss" as *;
+
+// ===========================
+// =          Core styles    =
+// ===========================
+
+
 .edition-tools {
     display: none;
     position: absolute;
     top: 0; // basics here
     background: red;
     @include flex-align(center, center, 0);
+
+    &-color { 
+        @include flex-align(center, center, 0);
+    }
+    &-edit {
+        @include flex-align(center, center, 0);
+        
+    }
+    &-text {
+        @include flex-align(center, center, 0);
+    }
+    &-aligment {
+        @include flex-align(center, center, 0);
+    }
+    &-esentials {
+        @include flex-align(center, center, 0);
+
+    }
 }

@@ -1,4 +1,4 @@
-export enum TabStatus {
+export enum TabState {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
   CLOSED = "CLOSED",
