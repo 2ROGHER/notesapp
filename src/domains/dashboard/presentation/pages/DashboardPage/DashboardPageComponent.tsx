@@ -10,8 +10,8 @@ import {
   FooterBarComponent,
   TextInputFieldComponent,
 } from "../../../";
-import { Tab } from "../../../domain";
-import { EditionToolsWidget } from "../../widgets/EditionToolsWidget/EditionToolsWidget";
+
+import { useSelector } from "react-redux";
 
 // TODO("implement here contexts to works freely")
 
@@ -27,14 +27,7 @@ export const DashboardPageComponent: React.FC<
   DashboardPageComponentProps
 > = (): JSX.Element => {
   // TODO("Here we need to use the store [tab] state and render the tabs")
-  const [tabs, setTabs] = React.useState([
-    new Tab(v4(), "text.md", false, false, true, false),
-    new Tab(v4(), "another.md", false, false, true, false),
-    new Tab(v4(), "text.js", false, false, true, false),
-    new Tab(v4(), "bundle.js", false, false, true, false),
-    new Tab(v4(), "index.html", false, false, true, false),
-  ]);
-
+  const tabs = useSelector((state: any) => state.dashboard.header.tabs);
   return (
     <div className="dashboard">
       <header className="dashboard-header">

@@ -1,15 +1,17 @@
 import React, { useRef, type JSX } from "react";
 import "./TabComponent.scss";
+import { useDispatch } from "react-redux";
+import {
+  closeTab,
+  toggleTabActive,
+  toggleTabHover,
+} from "../../../../../core/state/actions";
+import type { Dispatch } from "redux";
+import type { Tab } from "../../../domain";
 
 export type TabComponentProps = {
-  _id: string;
-  _label: string;
-  _changed: boolean;
-  _hovered: boolean;
-  _active: boolean;
-  _state: boolean;
-  onTabClick: () => void;
-  onCloseTab: () => void;
+  tab: Tab;
+  index: number;
 };
 /**
  * This component is used to create o render a [tab]
@@ -17,44 +19,45 @@ export type TabComponentProps = {
  * @returns React Component
  */
 export const TabComponent: React.FC<TabComponentProps> = ({
-  _label = "",
-  _changed = true,
-  _hovered = false,
-  _active = false,
-  _state = true,
-  onTabClick = () => {},
-  onCloseTab = () => {},
+  tab,
+  index,
 }): JSX.Element => {
-  const [hovered, setHovered] = React.useState((_hovered = false));
-  const [changed, setChanged] = React.useState((_changed = true));
+  const dispatch = useDispatch<Dispatch<any>>();
+  const tabRef = useRef<HTMLDivElement>(null);
 
-  const handleTabOver = () => setHovered(true);
-  const handleTabLeave = () => setHovered(false);
-  const handleTabClick = () => {
-    _active = !_active;
+  const handleTabOver = (id: string) => dispatch(toggleTabHover(id, true));
+
+  const handleTabLeave = (id: string) => dispatch(toggleTabHover(id, false));
+
+  const handleTabClick = (id: string) => {
+    dispatch(toggleTabActive(id));
+  };
+
+  const handleCloseTab = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation(); // stop event propagation
+    dispatch(closeTab(id));
   };
 
   const classes = [
     "tab",
-    hovered ? "tab--hovered" : "",
-    _active ? "tab--active" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+    tab.hovered ? "tab--hovered-on" : "tab--hovered-off",
+    tab.active ? "tab--selected" : "tab--unselected",
+  ].join(" ");
 
   return (
     <div
       className={classes}
-      onMouseOver={handleTabOver}
-      onMouseLeave={handleTabLeave}
-      onClick={handleTabClick}
+      onMouseOver={() => handleTabOver(tab.id)}
+      onMouseLeave={() => handleTabLeave(tab.id)}
+      onClick={() => handleTabClick(tab.id)}
+      ref={tabRef}
     >
-      <div className="tab-active"></div>
+      {index == 0 && <div className="tab-active"></div>}
 
-      <div className="tab-label">{_label}</div>
+      <div className="tab-label">{tab.label}</div>
 
-      {hovered ? (
-        <div className="tab-closed" onClick={onCloseTab}>
+      {tab.hovered ? (
+        <div className="tab-closed" onClick={(e) => handleCloseTab(e, tab.id)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -74,7 +77,7 @@ export const TabComponent: React.FC<TabComponentProps> = ({
         </div>
       ) : (
         //  If the tab is hovered this is showed, otherwise this is not either changed is not false
-        changed && <div className="tab-changed"></div>
+        tab.changed && <div className="tab-changed"></div>
       )}
     </div>
   );

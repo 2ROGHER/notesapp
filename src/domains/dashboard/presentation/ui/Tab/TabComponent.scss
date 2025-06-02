@@ -10,7 +10,7 @@
     &-active {
         width: 0.5rem;
         height: 0.5rem;
-        background: blue;
+        background: #726e6e;
         border-radius: 50%;
     }
 
@@ -45,9 +45,12 @@
         margin-left: auto !important;
     }
 
- 
-
-    &::after {
+    // ==========================
+    // =          STATES        =
+    // ==========================
+    // hovered state on
+    &::after,
+    &--hovered-off::after {
         content: "";
         height: calc(20 / 16) + rem;
         width: 1px;
@@ -58,12 +61,19 @@
         transform: translateY(-50%);
         color: $base-text-color;
     }
-    &--hovered::after {
+
+    // hovered state off
+    &--hovered-on::after {
         opacity: 0;
         pointer-events: none;
     }
-    &--active {
+
+    &--selected {
         background: $base-active-bg-tab-color;
+    }
+    &--selected::after {
+        opacity: 0;
+        pointer-events: none;
     }
 
     &:hover {
@@ -74,4 +84,3 @@
 // ==========================
 // =          OTHERS          =
 // ==========================
-

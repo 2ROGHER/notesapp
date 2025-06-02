@@ -1,10 +1,32 @@
+import type { TabStatus } from "./tab-status.enum";
+
+/**
+ * Class to represent a tab in the dashboard page.
+ *
+ * @class Tab
+ * @property {string} _id - the unique identifier of the tab
+ * @property {string} _label - the label that will be displayed in the tab
+ * @property {boolean} _changed - whether the tab has been changed or not
+ * @property {boolean} _hovered - whether the tab is being hovered or not
+ * @property {boolean} _active - whether the tab is active or not
+ * @property {TabStatus} _state - the state of the tab, whether is opened or closed or updated etc.
+ * @example
+ * const tab = new Tab(
+ *   '1',
+ *   'Tab 1',
+ *   true,
+ *   false,
+ *   true,
+ *   true
+ * );
+ */
 export class Tab {
   private _id: string;
   private _label: string;
   private _changed: boolean;
   private _hovered: boolean;
   private _active: boolean;
-  private _state: boolean;
+  private _state: TabStatus;
 
   constructor(
     id: string,
@@ -12,7 +34,7 @@ export class Tab {
     changed: boolean,
     hovered: boolean,
     active: boolean,
-    state: boolean
+    state: TabStatus
   ) {
     this._id = id;
     this._label = label;
@@ -57,10 +79,14 @@ export class Tab {
     this._active = value;
   }
 
-  get state(): boolean {
+  get state(): TabStatus {
     return this._state;
   }
-  set state(value: boolean) {
+  set state(value: TabStatus) {
     this._state = value;
   }
+
+  // ===================================
+  //            Secondary Methods
+  // ===================================
 }
