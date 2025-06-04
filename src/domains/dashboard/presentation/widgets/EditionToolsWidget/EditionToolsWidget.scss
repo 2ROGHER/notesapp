@@ -4,29 +4,77 @@
 // =          Core styles    =
 // ===========================
 
-
 .edition-tools {
-    display: none;
-    position: absolute;
-    top: 0; // basics here
-    background: red;
-    @include flex-align(center, center, 0);
+    position: relative;
+    @include flex-align(center, center, 0, row);
+    padding: 1rem !important; // base container padding
+    border-radius: $border-radius;
+    background: $base-edition-tools-bg-color;
 
-    &-color { 
-        @include flex-align(center, center, 0);
-    }
-    &-edit {
-        @include flex-align(center, center, 0);
-        
-    }
-    &-text {
-        @include flex-align(center, center, 0);
-    }
-    &-aligment {
-        @include flex-align(center, center, 0);
-    }
+    &-text,
+    &-aligment,
     &-esentials {
-        @include flex-align(center, center, 0);
-
+        @include flex-align(center, center, 0.5rem);
+        padding: 0 0 0 0.5rem !important;
     }
+    &-color {
+        padding: 0 0.5rem;
+    }
+
+    &-edit {
+        @include flex-align(center, center, 0.5rem);
+        &::after,
+        &::before {
+            content: "";
+            width: 1px;
+            height: 1.5rem;
+            background: $base-border-color;
+        }
+        // &-img {
+        //     @include flex-align(center, center);
+        //     cursor: pointer;
+        //     padding: $base-padding-horizontal;
+        //     border-radius: $border-radius;
+        //     &:hover {
+        //         background: $base-hover-bg-color;
+        //     }
+        // }
+    }
+
+    &-text,
+    &-aligment {
+        &::after {
+            content: "";
+            width: 1px;
+            height: 1.5rem;
+            background: $base-border-color;
+        }
+    }
+
+    &-text {
+        div:nth-child(4),
+        div:nth-child(5) {
+            width: 32px;
+            height: 32px;
+        }
+        //    background: red;
+    }
+
+    .edition-tools-option {
+        @include flex-align(center, center);
+        // background: blue;
+        padding: 0.5rem;
+        border-radius: $border-radius;
+        &:hover {
+            background: $base-hover-bg-color;
+            cursor: pointer;
+        }
+        // width: 32px;
+        // height: 32px;
+    }
+    // .edition-tools-option {
+    //     width: 32px;
+    //     background-color: red;
+    //     height: 32px;
+    // }
 }

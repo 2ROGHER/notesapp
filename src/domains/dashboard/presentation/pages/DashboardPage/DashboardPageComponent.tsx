@@ -1,7 +1,7 @@
 import "./DashboardPageComponent.scss";
 import { EditionToolsWidget } from "../../widgets/EditionToolsWidget/EditionToolsWidget";
 
-import React, { type JSX } from "react";
+import React, { type JSX, useRef } from "react";
 
 import {
   LogoComponent,
@@ -12,7 +12,6 @@ import {
 } from "../../../";
 
 import { useSelector } from "react-redux";
-import { DropDownMenuComponent } from "../../ui/DropdownMenu/DropdownMenuComponent";
 
 // TODO("implement here contexts to works freely")
 
@@ -28,7 +27,13 @@ export const DashboardPageComponent: React.FC<
   DashboardPageComponentProps
 > = (): JSX.Element => {
   // TODO("Here we need to use the store [tab] state and render the tabs")
-  const tabs = useSelector((state: any) => state.dashboard.header.tabs);
+  const tabs = useSelector((state: any) => state.dashboardReducer.header.tabs);
+
+
+  const containerRef = useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>;
+
   return (
     <div className="dashboard">
       <header className="dashboard-header">
@@ -47,16 +52,11 @@ export const DashboardPageComponent: React.FC<
       <section className="dashboard-tools">
         <ToolsBarComponent options={["File", "View", "Edit"]} />
       </section>
-      <main className="dashboard-main">
+      <main className="dashboard-main" ref={containerRef}>
         {/* Here goes the EditorTools widget to edit your notes as you want */}
-        {/* <EditionToolsWidget /> */}
 
-        <DropDownMenuComponent
-          label="fonts"
-          items={["font1", "font2", "font3", "font4", "font5"]}
-          props={{ width: "100px", height: "100px", background: "#2c2c2c" }}
-          defaultComponentProps={<span>items not found</span>}
-        />
+        <EditionToolsWidget limitedArea={containerRef} />
+
         <TextInputFieldComponent />
       </main>
 

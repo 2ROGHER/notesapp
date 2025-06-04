@@ -19,10 +19,10 @@ export const TextInputFieldComponent: React.FC<
   const [col, setCol] = useState(0);
   const [text, setText] = useState("");
 
-  const divRef = useRef<HTMLDivElement>(null); // This [hook] is used to get the reference of the text input field
+  const textRef = useRef<HTMLDivElement>(null); // This [hook] is used to get the reference of the text input field
   useEffect(() => {
-    if (divRef.current) {
-      divRef.current.focus(); // Focus the text input field when the component is mounted
+    if (textRef.current) {
+      textRef.current.focus(); // Focus the text input field when the component is mounted
     }
   }, []);
 
@@ -54,7 +54,7 @@ export const TextInputFieldComponent: React.FC<
         aria-multiline="true"
         suppressContentEditableWarning={true}
         onInput={(e) => handleTextInput(e)}
-        ref={divRef}
+        ref={textRef}
       ></div>
     </aside>
   );

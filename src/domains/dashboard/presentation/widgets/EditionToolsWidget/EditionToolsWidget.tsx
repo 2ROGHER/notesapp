@@ -1,43 +1,433 @@
+import { DropDownMenuComponent } from "../../ui/DropdownMenu/DropdownMenuComponent";
 import "./EditionToolsWidget.scss";
-import React, { type JSX } from "react";
+import React, {
+  type JSX,
+  useRef,
+  useEffect,
+  useState,
+  type RefObject,
+} from "react";
 
-export const EditionToolsWidget: React.FC = (): JSX.Element => {
+export interface EditionToolsWidgetProps {
+  limitedArea?: RefObject<HTMLDivElement>;
+}
+
+export interface EditionToolsWidgetStateProps {}
+
+export const EditionToolsWidget: React.FC<EditionToolsWidgetProps> = ({
+  limitedArea,
+}): JSX.Element => {
+  const [editionToolsProps, setEditionToolsProps] = useState<any>({
+    textColor: "",
+    fontSize: "1rem",
+    textBold: false,
+  });
+
+  const [position, setPosition] = useState<any>({ x: 500, y: 50 });
+  const [draggin, setDraggin] = useState<boolean>(false);
+  const offset = useRef({ x: 0, y: 0 }); // This is used to get the offset of the mouse or mouse event
+  const editionRef = useRef<HTMLDivElement>(null); // This is used to get the reference of the edition tools widget
+  // const containerRef = useRef<HTMLDivElement>(null); // This is used to get the reference of the dashboard container in this case <main>
+
+  /**
+   * Method handles or controls the [mouse down] key input value
+   * @param e - React.MouseEvent<HTMLDivElement>
+   */
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (editionRef.current) {
+      const rect = editionRef.current.getBoundingClientRect(); // This is used to get the position of the edition tools widget
+      offset.current = {
+        x: e.clientX - rect.left, // Updated the positions with the current mouse position clicked (if the editionRef exists)
+        y: e.clientY - rect.top,
+      };
+      setDraggin(true); // This is used to set the draggin state to true when the client move or dragg the component
+    }
+  };
+
+  /**
+   * Method hanldes or controls the [mouse moviment]
+   * @param e
+   * @returns
+   */
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!draggin || !limitedArea?.current) return; // This is used to return if the draggin state is false or the containerRef is null
+    const containerRect = limitedArea.current.getBoundingClientRect(); // This is used to get the position of the dashboard container in this case the <main> HTML element
+
+    const x = e.clientX - containerRect.left - offset.current.x; // This is used to get the position of the mouse at the (x) axis
+    const y = e.clientY - containerRect.top - offset.current.y; // This is used to get the position of the mouse at the (y) axis
+
+    // Limits to don't leave  from the dashboard container
+    const maxX = containerRect.width - (editionRef.current?.offsetWidth || 0);
+    const maxY = containerRect.height - (editionRef.current?.offsetHeight || 0);
+
+    setPosition({
+      x: Math.max(0, Math.min(x, maxX)), // set the position of the edition tools widget at the (x) axis
+      y: Math.max(0, Math.min(y, maxY)), // set the position of the edition tools widget at the (y) axis
+    });
+  };
+
+  /**
+   * Method handles or controls the [mouse up] key input value
+   * @returns void
+   */
+  const handleMouseUp = () => {
+    setDraggin(false);
+  };
+
+  useEffect(() => {
+    if (draggin) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    } else {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [draggin]);
+
   return (
-    <div className="edition-tools">
+    <div
+      className="edition-tools"
+      role="toolbar"
+      aria-label="edition-tools"
+      ref={editionRef}
+      onMouseDown={handleMouseDown}
+      style={{
+        position: "absolute",
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        cursor: "move",
+        zIndex: 1000,
+      }}
+    >
       <section className="edition-tools-color">
         <input
           title="color picker"
           aria-label="color-picker"
+          role="button"
           type="color"
-          name="color"
+          name="textColor"
           id="color"
-          value="red"
+          value={editionToolsProps.textColor}
+          onChange={(e) => {
+            setEditionToolsProps({
+              ...editionToolsProps,
+              [e.target.name]: e.target.value,
+            });
+          }}
         ></input>
       </section>
       <section className="edition-tools-edit">
-        <div>font</div>
-        <div>text-size</div>
-        <div>img</div>
-        <div>background-image</div>
+        {/* <!-- font family -->  */}
+        <DropDownMenuComponent
+          label="Manrope"
+          items={["Manrope", "Poppins", "Quicksand", "Saira Extra Condensed"]}
+          defaultComponentProps={<h1>Manrope</h1>}
+          props={{ width: "132px", background: "#2C2C2C" }}
+        />
+        {/* <!-- font size --> */}
+        <DropDownMenuComponent
+          label="12px"
+          items={["12px", "14px", "16px", "18px", "20px", "22px", "24px"]}
+          defaultComponentProps={<h1>12px</h1>}
+          props={{ width: "100px", background: "#2C2C2C" }}
+        />
+        {/* <!-- background image --> */}
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M14 2.8125C17.97 2.8125 19.97 2.8125 21.36 4.2025C22.75 5.5925 22.75 7.5825 22.75 11.5625V13.5625C22.75 17.5325 22.75 19.5325 21.36 20.9225C19.97 22.3125 17.97 22.3125 14 22.3125H10C6.03 22.3125 4.03 22.3125 2.64 20.9225C1.25 19.5325 1.25 17.5425 1.25 13.5625V11.5625C1.25 7.5925 1.25 5.5925 2.64 4.2025C4.03 2.8125 6.03 2.8125 10 2.8125H14ZM3.7 5.2625C2.75 6.2125 2.75 8.0025 2.75 11.5625H2.74V13.5625C2.74 15.0025 2.75 16.1525 2.81 17.0725L5.59 13.9525C6.28 13.1625 7.63 13.1225 8.37 13.8725L10 15.5025L14.13 11.3725C14.86 10.6425 16.18 10.6625 16.9 11.4325L21.23 16.1525C21.25 15.4125 21.25 14.5625 21.25 13.5625V11.5625C21.25 8.0025 21.25 6.2125 20.3 5.2625C19.35 4.3125 17.56 4.3125 14 4.3125H10C6.44 4.3125 4.65 4.3125 3.7 5.2625ZM10 20.8125H14V20.8025H14C17.56 20.8025 19.35 20.8025 20.3 19.8525C20.7 19.4625 20.93 18.9025 21.06 18.1425C21.02 18.1125 20.95 18.0625 20.95 18.0625L15.8 12.4425C15.64 12.2725 15.35 12.2625 15.19 12.4225L10.53 17.0825C10.25 17.3625 9.75 17.3625 9.47 17.0825L7.31 14.9225C7.15 14.7625 6.87 14.7725 6.72 14.9425L3.15 18.9625C3.28 19.3225 3.46 19.6225 3.7 19.8625C4.65 20.8125 6.44 20.8125 10 20.8125ZM10.75 9.0625C10.75 10.3025 9.74 11.3125 8.5 11.3125C7.26 11.3125 6.25 10.3025 6.25 9.0625C6.25 7.8225 7.26 6.8125 8.5 6.8125C9.74 6.8125 10.75 7.8225 10.75 9.0625ZM9.25 9.0625C9.25 8.6525 8.91 8.3125 8.5 8.3125C8.09 8.3125 7.75 8.6525 7.75 9.0625C7.75 9.4725 8.09 9.8125 8.5 9.8125C8.91 9.8125 9.25 9.4725 9.25 9.0625Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
       </section>
       <section className="edition-tools-text">
-        <div>bold</div>
-        <div>italic</div>
-        <div>underline</div>
-        <div>strikethrough</div>
-        <div>superscript</div>
-        <div>subscript</div>
+        {/* <!-- text bold option --> */}
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M8.232,2.25 L12.86,2.25 C15.729,2.25 18.031,4.613 18.031,7.5 C18.031,9.204 17.229,10.725 15.982,11.686 C17.786,12.5 19.031,14.363 19.031,16.5 C19.031,19.373 16.782,21.75 13.948,21.75 L8.229,21.75 C7.565,21.75 6.993,21.75 6.535,21.688 C6.044,21.622 5.573,21.473 5.19,21.091 C4.808,20.709 4.659,20.237 4.593,19.746 C4.531,19.287 4.531,18.714 4.531,18.049 L4.531,5.951 C4.531,5.286 4.531,4.713 4.593,4.254 C4.659,3.763 4.808,3.291 5.19,2.909 C5.573,2.527 6.044,2.378 6.535,2.312 C6.994,2.25 7.567,2.25 8.232,2.25 L8.232,2.25 Z M13.948,12.75 L6.031,12.75 L6.031,18 C6.031,18.728 6.033,19.199 6.079,19.546 C6.123,19.871 6.194,19.973 6.251,20.03 C6.308,20.087 6.41,20.158 6.735,20.202 C7.082,20.248 7.553,20.25 8.281,20.25 L13.948,20.25 C15.901,20.25 17.531,18.598 17.531,16.5 C17.531,14.402 15.901,12.75 13.948,12.75 Z M12.866,11.25 C14.878,11.247 16.531,9.582 16.531,7.5 C16.531,5.416 14.875,3.75 12.86,3.75 L8.281,3.75 C7.553,3.75 7.082,3.752 6.735,3.798 C6.41,3.842 6.308,3.913 6.251,3.97 C6.194,4.027 6.123,4.129 6.079,4.454 C6.033,4.801 6.031,5.272 6.031,6 L6.031,11.25 Z"
+            />
+          </svg>
+        </div>
+        {/* <!-- text cursive option --> */}
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M19.281,3.25 C19.695,3.25 20.031,3.586 20.031,4 C20.031,4.414 19.695,4.75 19.281,4.75 L16.745,4.75 L9.495,19.25 L12.281,19.25 C12.696,19.25 13.031,19.586 13.031,20 C13.031,20.414 12.696,20.75 12.281,20.75 L8.303,20.75 C8.288,20.75 8.273,20.75 8.259,20.75 L5.281,20.75 C4.867,20.75 4.531,20.414 4.531,20 C4.531,19.586 4.867,19.25 5.281,19.25 L7.818,19.25 L15.068,4.75 L12.281,4.75 C11.867,4.75 11.531,4.414 11.531,4 C11.531,3.586 11.867,3.25 12.281,3.25 Z"
+            />
+          </svg>
+        </div>
+        {/* <!-- text underline option --> */}
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M6.531,3 L6.531,11.5 C6.531,14.676 9.106,17.25 12.281,17.25 C15.457,17.25 18.031,14.676 18.031,11.5 L18.031,3 C18.031,2.586 18.367,2.25 18.781,2.25 C19.195,2.25 19.531,2.586 19.531,3 L19.531,11.5 C19.531,15.504 16.285,18.75 12.281,18.75 C8.277,18.75 5.031,15.504 5.031,11.5 L5.031,3 C5.031,2.586 5.367,2.25 5.781,2.25 C6.195,2.25 6.531,2.586 6.531,3 Z M3.281,20.25 L21.281,20.25 C21.695,20.25 22.031,20.586 22.031,21 C22.031,21.414 21.695,21.75 21.281,21.75 L3.281,21.75 C2.867,21.75 2.531,21.414 2.531,21 C2.531,20.586 2.867,20.25 3.281,20.25 Z"
+            />
+          </svg>
+        </div>
+        {/* <!-- text strikethrough option --> */}
+        <div className="edition-tools-option">
+          <svg
+            width="26"
+            height="14"
+            viewBox="0 0 26 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.78 10.9H3.7L2.58 14H0.66L5.7 0.14H7.8L12.82 14H10.9L9.78 10.9ZM9.26 9.42L6.74 2.38L4.22 9.42H9.26ZM25.4166 7.46H21.1566V11.78H19.4566V7.46H15.2166V5.92H19.4566V1.58H21.1566V5.92H25.4166V7.46Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+        <div className="edition-tools-option">
+          <svg
+            width="15"
+            height="9"
+            viewBox="0 0 15 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.368 7.14H2.72L2.048 9H0.896L3.92 0.684H5.18L8.192 9H7.04L6.368 7.14ZM6.056 6.252L4.544 2.028L3.032 6.252H6.056ZM14.0699 4.14V5.064H9.28194V4.14H14.0699Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M8.281,4.25 C8.806,4.25 9.234,4.491 9.571,4.831 C9.893,5.156 10.164,5.6 10.413,6.105 C10.906,7.104 11.421,8.575 12.076,10.443 L14.989,18.752 C15.126,19.143 14.92,19.571 14.53,19.708 C14.139,19.845 13.711,19.639 13.574,19.248 L11.295,12.75 L5.267,12.75 L2.989,19.248 C2.852,19.639 2.424,19.845 2.033,19.708 C1.642,19.571 1.437,19.143 1.574,18.752 L4.487,10.443 C5.142,8.575 5.657,7.104 6.15,6.105 C6.399,5.6 6.67,5.156 6.992,4.831 C7.329,4.491 7.757,4.25 8.281,4.25 Z M19.579,9.154 C20.941,9.319 22.615,10.163 22.939,11.838 C23.056,12.444 23.049,13.145 23.002,13.964 L23.002,18.442 C23.002,18.856 22.666,19.192 22.252,19.192 C21.919,19.192 21.637,18.975 21.539,18.675 C21.517,18.692 21.495,18.709 21.474,18.726 C20.878,19.187 20.105,19.615 19.209,19.655 C18.86,19.67 18.514,19.645 18.179,19.587 C14.79,19.003 14.585,14.282 17.909,13.358 C18.432,13.212 18.956,13.192 19.408,13.192 L21.532,13.192 C21.54,12.745 21.52,12.403 21.466,12.122 C21.323,11.384 20.476,10.774 19.399,10.643 C18.904,10.583 18.528,10.625 18.194,10.779 C17.856,10.935 17.479,11.245 17.055,11.864 C16.82,12.205 16.354,12.292 16.012,12.057 C15.67,11.823 15.584,11.356 15.818,11.015 C16.341,10.252 16.908,9.721 17.566,9.417 C18.23,9.111 18.907,9.073 19.579,9.154 Z M10.77,11.25 L10.681,10.996 C10.002,9.059 9.515,7.676 9.068,6.769 C8.844,6.316 8.659,6.041 8.506,5.887 C8.37,5.75 8.304,5.75 8.282,5.75 L8.281,5.75 C8.259,5.75 8.193,5.75 8.057,5.887 C7.904,6.041 7.718,6.316 7.495,6.769 C7.048,7.676 6.561,9.059 5.882,10.996 L5.793,11.25 Z M19.408,14.692 C18.987,14.692 18.63,14.714 18.311,14.803 C16.49,15.309 16.662,17.803 18.434,18.109 C18.672,18.15 18.91,18.167 19.142,18.156 C19.601,18.136 20.079,17.909 20.556,17.54 C21.114,17.108 21.502,16.623 21.502,15.942 L21.502,14.692 Z"
+            />
+          </svg>
+        </div>
+
+        <div className="edition-tools-option">
+          <svg
+            width="16px"
+            height="16px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="#dfdfdf"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
+                fill="#dfdfdf"
+              ></path>{" "}
+            </g>
+          </svg>
+        </div>
       </section>
 
       <section className="edition-tools-aligment">
-        <div>left</div>
-        <div>center</div>
-        <div>right</div>
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M3.281,2.25 L21.281,2.25 C21.695,2.25 22.031,2.586 22.031,3 C22.031,3.414 21.695,3.75 21.281,3.75 L3.281,3.75 C2.867,3.75 2.531,3.414 2.531,3 C2.531,2.586 2.867,2.25 3.281,2.25 Z M2.531,15 C2.531,14.586 2.867,14.25 3.281,14.25 L21.281,14.25 C21.695,14.25 22.031,14.586 22.031,15 C22.031,15.414 21.695,15.75 21.281,15.75 L3.281,15.75 C2.867,15.75 2.531,15.414 2.531,15 Z M3.281,8.25 L11.281,8.25 C11.696,8.25 12.031,8.586 12.031,9 C12.031,9.414 11.696,9.75 11.281,9.75 L3.281,9.75 C2.867,9.75 2.531,9.414 2.531,9 C2.531,8.586 2.867,8.25 3.281,8.25 Z M3.281,20.25 L11.281,20.25 C11.696,20.25 12.031,20.586 12.031,21 C12.031,21.414 11.696,21.75 11.281,21.75 L3.281,21.75 C2.867,21.75 2.531,21.414 2.531,21 C2.531,20.586 2.867,20.25 3.281,20.25 Z"
+            />
+          </svg>
+        </div>
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M3.281,2.25 L21.281,2.25 C21.695,2.25 22.031,2.586 22.031,3 C22.031,3.414 21.695,3.75 21.281,3.75 L3.281,3.75 C2.867,3.75 2.531,3.414 2.531,3 C2.531,2.586 2.867,2.25 3.281,2.25 Z M2.531,15 C2.531,14.586 2.867,14.25 3.281,14.25 L21.281,14.25 C21.695,14.25 22.031,14.586 22.031,15 C22.031,15.414 21.695,15.75 21.281,15.75 L3.281,15.75 C2.867,15.75 2.531,15.414 2.531,15 Z M13.281,8.25 L21.281,8.25 C21.695,8.25 22.031,8.586 22.031,9 C22.031,9.414 21.695,9.75 21.281,9.75 L13.281,9.75 C12.867,9.75 12.531,9.414 12.531,9 C12.531,8.586 12.867,8.25 13.281,8.25 Z M13.281,20.25 L21.281,20.25 C21.695,20.25 22.031,20.586 22.031,21 C22.031,21.414 21.695,21.75 21.281,21.75 L13.281,21.75 C12.867,21.75 12.531,21.414 12.531,21 C12.531,20.586 12.867,20.25 13.281,20.25 Z"
+            />
+          </svg>
+        </div>
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M3.281,2.25 L21.281,2.25 C21.695,2.25 22.031,2.586 22.031,3 C22.031,3.414 21.695,3.75 21.281,3.75 L3.281,3.75 C2.867,3.75 2.531,3.414 2.531,3 C2.531,2.586 2.867,2.25 3.281,2.25 Z M2.531,15 C2.531,14.586 2.867,14.25 3.281,14.25 L21.281,14.25 C21.695,14.25 22.031,14.586 22.031,15 C22.031,15.414 21.695,15.75 21.281,15.75 L3.281,15.75 C2.867,15.75 2.531,15.414 2.531,15 Z M8.281,8.25 L16.281,8.25 C16.695,8.25 17.031,8.586 17.031,9 C17.031,9.414 16.695,9.75 16.281,9.75 L8.281,9.75 C7.867,9.75 7.531,9.414 7.531,9 C7.531,8.586 7.867,8.25 8.281,8.25 Z M8.281,20.25 L16.281,20.25 C16.695,20.25 17.031,20.586 17.031,21 C17.031,21.414 16.695,21.75 16.281,21.75 L8.281,21.75 C7.867,21.75 7.531,21.414 7.531,21 C7.531,20.586 7.867,20.25 8.281,20.25 Z"
+            />
+          </svg>
+        </div>
+        <div className="edition-tools-option">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M3.281,20.25 L21.281,20.25 C21.695,20.25 22.031,20.586 22.031,21 C22.031,21.414 21.695,21.75 21.281,21.75 L3.281,21.75 C2.867,21.75 2.531,21.414 2.531,21 C2.531,20.586 2.867,20.25 3.281,20.25 Z M3.281,2.25 L21.281,2.25 C21.695,2.25 22.031,2.586 22.031,3 C22.031,3.414 21.695,3.75 21.281,3.75 L3.281,3.75 C2.867,3.75 2.531,3.414 2.531,3 C2.531,2.586 2.867,2.25 3.281,2.25 Z M3.281,8.25 L21.281,8.25 C21.695,8.25 22.031,8.586 22.031,9 C22.031,9.414 21.695,9.75 21.281,9.75 L3.281,9.75 C2.867,9.75 2.531,9.414 2.531,9 C2.531,8.586 2.867,8.25 3.281,8.25 Z M2.531,15 C2.531,14.586 2.867,14.25 3.281,14.25 L21.281,14.25 C21.695,14.25 22.031,14.586 22.031,15 C22.031,15.414 21.695,15.75 21.281,15.75 L3.281,15.75 C2.867,15.75 2.531,15.414 2.531,15 Z"
+            />
+          </svg>
+        </div>
+        <div className="edition-tools-option">
+          <svg
+            width="16px"
+            height="16px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="#dfdfdf"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
+                fill="#dfdfdf"
+              ></path>{" "}
+            </g>
+          </svg>
+        </div>
       </section>
-      <section className="edition-tools-esentials">
-        <div>voice</div>
-        <div>update file to drive</div>
-        <div>clock|reminder</div>
+      <section className="edition-tools-esentials" aria-label="esentials">
+        <div className="edition-tools-option" title="Dict voice">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M12,16.75 C8.824,16.75 6.25,14.176 6.25,11 L6.25,7 C6.25,3.824 8.824,1.25 12,1.25 C15.176,1.25 17.75,3.824 17.75,7 L17.75,11 C17.75,14.176 15.176,16.75 12,16.75 Z M12,2.75 C9.653,2.75 7.75,4.653 7.75,7 L7.75,11 C7.75,13.347 9.653,15.25 12,15.25 C14.091,15.25 15.83,13.74 16.184,11.75 L14,11.75 C13.586,11.75 13.25,11.414 13.25,11 C13.25,10.586 13.586,10.25 14,10.25 L16.25,10.25 L16.25,7.75 L14,7.75 C13.586,7.75 13.25,7.414 13.25,7 C13.25,6.586 13.586,6.25 14,6.25 L16.184,6.25 C15.83,4.26 14.091,2.75 12,2.75 Z M4.75,11 C4.75,15.004 7.996,18.25 12,18.25 C16.004,18.25 19.25,15.004 19.25,11 C19.25,10.586 19.586,10.25 20,10.25 C20.414,10.25 20.75,10.586 20.75,11 C20.75,15.58 17.231,19.338 12.75,19.718 L12.75,21.25 L15,21.25 C15.414,21.25 15.75,21.586 15.75,22 C15.75,22.414 15.414,22.75 15,22.75 L9,22.75 C8.586,22.75 8.25,22.414 8.25,22 C8.25,21.586 8.586,21.25 9,21.25 L11.25,21.25 L11.25,19.718 C6.769,19.338 3.25,15.58 3.25,11 C3.25,10.586 3.586,10.25 4,10.25 C4.414,10.25 4.75,10.586 4.75,11 Z"
+            />
+          </svg>
+        </div>
+        <div
+          className="edition-tools-option"
+          aria-label="update file"
+          title="Update file"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M14.104,1.25 C16.48,1.289 18.182,1.455 19.359,2.632 C20.107,3.381 20.439,4.33 20.597,5.503 C20.75,6.642 20.75,8.099 20.75,9.938 L20.75,13.339 L20.75,13.46 L20.75,13.461 C20.751,14.159 20.751,14.712 20.541,15.22 C20.33,15.729 19.939,16.12 19.444,16.613 L19.359,16.699 L14.622,21.438 L14.549,21.512 C14.122,21.939 13.786,22.276 13.358,22.481 C13.27,22.523 13.179,22.56 13.087,22.593 C12.64,22.751 12.164,22.751 11.56,22.75 L11.456,22.75 L11.408,22.75 C9.826,22.75 8.573,22.75 7.581,22.634 C6.562,22.515 5.723,22.265 5.018,21.697 C4.755,21.485 4.515,21.244 4.302,20.98 C3.734,20.276 3.485,19.436 3.366,18.417 C3.25,17.425 3.25,16.171 3.25,14.589 L3.25,11.995 C3.25,11.581 3.586,11.245 4,11.245 C4.414,11.245 4.75,11.581 4.75,11.995 L4.75,14.54 C4.75,16.182 4.751,17.348 4.856,18.243 C4.958,19.123 5.152,19.645 5.47,20.039 C5.616,20.22 5.78,20.384 5.96,20.53 C6.355,20.848 6.876,21.042 7.755,21.144 C8.65,21.249 9.815,21.25 11.456,21.25 C11.842,21.25 12.083,21.247 12.25,21.237 L12.25,20.945 C12.25,19.576 12.25,18.473 12.366,17.606 C12.488,16.706 12.746,15.948 13.348,15.345 C13.95,14.743 14.708,14.484 15.608,14.363 C16.475,14.246 17.577,14.246 18.945,14.247 L19.233,14.247 C19.247,14.054 19.25,13.777 19.25,13.339 L19.25,9.994 C19.25,8.086 19.248,6.731 19.11,5.703 C18.975,4.696 18.721,4.116 18.298,3.692 C17.612,3.006 16.549,2.79 14.08,2.75 C13.666,2.743 13.335,2.402 13.342,1.988 C13.349,1.574 13.69,1.243 14.104,1.25 Z M8.5,1.25 C10.208,1.25 11.491,2.599 11.696,4.149 C12.887,4.48 13.75,5.6 13.75,6.9 C13.75,8.448 12.533,9.75 10.975,9.75 L6.25,9.75 C4.568,9.75 3.25,8.344 3.25,6.667 C3.25,5.29 4.135,4.099 5.383,3.714 C5.746,2.31 6.988,1.25 8.5,1.25 Z M6.782,4.406 C6.752,4.767 6.468,5.055 6.108,5.09 C5.368,5.163 4.75,5.821 4.75,6.667 C4.75,7.567 5.447,8.25 6.25,8.25 L10.975,8.25 C11.654,8.25 12.25,7.672 12.25,6.9 C12.25,6.133 11.648,5.55 10.965,5.55 C10.755,5.55 10.554,5.462 10.412,5.307 C10.27,5.152 10.2,4.944 10.218,4.735 C10.309,3.689 9.492,2.75 8.5,2.75 C7.621,2.75 6.86,3.455 6.782,4.406 Z M15.808,15.85 C15.075,15.948 14.686,16.129 14.409,16.406 C14.132,16.683 13.952,17.072 13.853,17.806 C13.772,18.41 13.755,19.172 13.751,20.188 L18.189,15.747 C17.174,15.751 16.412,15.768 15.808,15.85 Z"
+            />
+          </svg>
+        </div>
+        <div
+          className="edition-tools-option"
+          aria-label="reminder"
+          title="Reminder"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            color="#fdfdfd"
+            fill="none"
+          >
+            <defs />
+            <path
+              fill="currentColor"
+              d="M12.75,2.75 L12.75,3.278 C17.784,3.661 21.75,7.868 21.75,13 C21.75,15.167 21.043,17.168 19.848,18.787 L21.53,20.47 C21.823,20.763 21.823,21.237 21.53,21.53 C21.237,21.823 20.763,21.823 20.47,21.53 L18.864,19.925 C17.102,21.671 14.677,22.75 12,22.75 C9.323,22.75 6.898,21.671 5.136,19.925 L3.53,21.53 C3.237,21.823 2.763,21.823 2.47,21.53 C2.177,21.237 2.177,20.763 2.47,20.47 L4.152,18.787 C2.957,17.168 2.25,15.167 2.25,13 C2.25,7.868 6.216,3.661 11.25,3.278 L11.25,2.75 L10,2.75 C9.586,2.75 9.25,2.414 9.25,2 C9.25,1.586 9.586,1.25 10,1.25 L14,1.25 C14.414,1.25 14.75,1.586 14.75,2 C14.75,2.414 14.414,2.75 14,2.75 Z M3.75,13 C3.75,17.556 7.444,21.25 12,21.25 C16.556,21.25 20.25,17.556 20.25,13 C20.25,8.444 16.556,4.75 12,4.75 C7.444,4.75 3.75,8.444 3.75,13 Z M12.75,9.5 L12.75,13.189 L14.53,14.97 C14.823,15.263 14.823,15.737 14.53,16.03 C14.237,16.323 13.763,16.323 13.47,16.03 L11.47,14.03 C11.329,13.89 11.25,13.699 11.25,13.5 L11.25,9.5 C11.25,9.086 11.586,8.75 12,8.75 C12.414,8.75 12.75,9.086 12.75,9.5 Z M3.303,2.27 C3.828,2.185 4.31,2.386 4.74,2.601 L5.335,2.899 C5.706,3.084 5.856,3.534 5.671,3.905 C5.485,4.275 5.035,4.426 4.664,4.24 L4.069,3.943 C3.653,3.735 3.554,3.749 3.541,3.751 C3.529,3.753 3.429,3.77 3.1,4.1 C2.77,4.429 2.753,4.529 2.751,4.541 C2.749,4.554 2.735,4.653 2.943,5.069 L3.24,5.664 C3.426,6.035 3.275,6.485 2.905,6.671 C2.534,6.856 2.084,6.706 1.899,6.335 L1.601,5.74 C1.386,5.31 1.185,4.828 1.27,4.303 C1.354,3.777 1.697,3.382 2.039,3.039 C2.382,2.697 2.777,2.354 3.303,2.27 Z M20.459,3.751 C20.446,3.749 20.346,3.735 19.931,3.943 L19.335,4.24 C18.965,4.426 18.514,4.275 18.329,3.905 C18.144,3.534 18.294,3.084 18.664,2.899 L19.26,2.601 C19.69,2.386 20.172,2.185 20.697,2.27 C21.222,2.354 21.618,2.697 21.961,3.039 C22.303,3.382 22.646,3.777 22.73,4.303 C22.815,4.828 22.614,5.31 22.399,5.74 L22.101,6.335 C21.916,6.706 21.465,6.856 21.095,6.671 C20.724,6.485 20.574,6.035 20.759,5.664 L21.057,5.069 C21.265,4.653 21.251,4.554 21.249,4.541 C21.247,4.529 21.229,4.429 20.9,4.1 C20.57,3.77 20.471,3.753 20.459,3.751 Z"
+            />
+          </svg>
+        </div>
       </section>
     </div>
   );

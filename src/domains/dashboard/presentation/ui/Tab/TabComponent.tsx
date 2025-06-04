@@ -5,7 +5,7 @@ import {
   closeTab,
   toggleTabActive,
   toggleTabHover,
-} from "../../../../../core/state/actions";
+} from "../../../../../core/state/actions/dashboard";
 import type { Dispatch } from "redux";
 import { TabState, type Tab } from "../../../domain";
 

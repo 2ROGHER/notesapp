@@ -25,7 +25,8 @@
     &-body {
         width: 100%;
         position: absolute;
-        bottom: -4.25rem;
+        // bottom: -4.25rem;
+        top: 2.25rem;
         background: #2c2c2c; // modify letter
         ul {
             position: relative;
@@ -36,12 +37,11 @@
                 width: 100%;
                 padding: 0.25rem;
                 cursor: pointer;
+                overflow: hidden;
             }
             li:hover {
                 background-color: $base-border-color;
             }
         }
-
-
     }
 }

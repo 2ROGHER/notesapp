@@ -1,7 +1,6 @@
 import "./DropdownMenuComponent.scss";
 
 import React, { useState, type JSX } from "react";
-import { useRef } from "react";
 
 export type DropDownMenuComponentProps = {
   defaultComponentProps: JSX.Element;
@@ -51,7 +50,6 @@ export const DropDownMenuComponent: React.FC<DropDownMenuComponentProps> = ({
               stroke-linejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
-              {" "}
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
